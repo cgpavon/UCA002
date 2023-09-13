@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ejemplo de Article en HTML</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        header, footer {
+            background-color: lightgray;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+        nav {
+            background-color: lightblue;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+
+        article {
+            background-color: lightgreen;
+            flex: 1;
+            padding: 20px;
+        }
+
+        aside {
+            background-color: lightyellow;
+            width: 20%;
+            padding: 20px;
+            overflow: auto;
+        }
+               /* Agrega este estilo al final de tu CSS actual */
+               #img-contenedor {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columnas por fila */
+            gap: 10px; /* Espacio entre las imágenes */
+        }
+
+        /* Estilo para las imágenes dentro del contenedor */
+        #img-contenedor img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Encabezado
+    </header>
+    <nav>
+        <button type="button" onclick="get_imagenes()">Traer Imagenes</button>
+        <button>Boton dos</button>
+    </nav>
+    <main>
+        <article>
+            <h1>Título del artículo</h1>
+            <div id="img-contenedor">
+            </div>
+        </article>
+        <aside>
+            <p>Texto que debería quedar al costado luego de aplicarle CSS</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed veniam sunt quos corrupti esse accusamus, nostrum aspernatur tempora earum sit ducimus cumque omnis consectetur eos, fugit facere iste officia ut.</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex sint ut numquam! A aliquam architecto tempore modi cumque aliquid accusamus, dolore aut possimus doloribus excepturi officiis nesciunt laborum quos. Impedit.</p>
+        </aside>
+    </main>
+    
+    En el código anterior, he creado un div con la clase "image-container" dentro del artículo y he agregado doce imágenes dentro de ese contenedor. Puedes reemplazar las rutas de las imágenes (src) y los atributos alt con las imágenes que desees utilizar. El CSS que has definido en tu archivo seguirá aplicándose a estas imágenes. Asegúrate de que las imágenes estén en la ubicación correcta en tu servidor o ajusta las rutas según sea necesario.
+    
+    <footer>
+        Pie de página
+    </footer>
+    <script>
+        function get_imagenes(){
+        fetch('http://127.0.0.1:4500/get_imagenes')
+            .then(response => response.json())
+            .then(imagenesUrls => {
+                const img_Contenedor = document.getElementById('img-contenedor');
+                imagenesUrls.forEach(url => {
+                        // Crear un div para contener la imagen y el botón de selección
+                        const imgDiv = document.createElement('div');
+                        imgDiv.classList.add('image-container'); // Estilo CSS para el contenedor
+
+                        // Crear la imagen
+                        const img = document.createElement('img');
+                        img.src = url;
+                        img.alt = 'Imagen';
+
+                        // Crear el botón de selección (puedes usar un botón o una casilla de verificación)
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox'; // Usar un checkbox para la selección
+                        // También puedes usar un botón si prefieres
+
+                        // Crear una etiqueta (label) para la leyenda
+                        const label = document.createElement('label');
+                        label.textContent = 'Agregar al Carrito';
+
+                        // Agregar la imagen y el Check al div contenedor
+                        imgDiv.appendChild(img);
+                        imgDiv.appendChild(checkbox);
+                        imgDiv.appendChild(label);
+
+                        // Agregar un evento para cambiar el texto del label cuando el checkbox cambie de estado
+                        checkbox.addEventListener('change', function() {
+                            if (checkbox.checked) {
+                                label.textContent = 'Sacar del Carrito';
+                            } else {
+                                label.textContent = 'Agregar al Carrito';
+                            }
+                        });                        
+                        
+                        // Agregar el div contenedor al contenedor principal
+                        img_Contenedor.appendChild(imgDiv);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

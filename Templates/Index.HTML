@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Producto</title>
+</head>
+<body>
+    <h1>Crear Producto</h1>
+
+    <!-- Formulario para crear un producto -->
+    <form id="createForm" >
+        <label for="ID">ID:</label>
+        <input type="text" id="ID" required>
+        <label for="Descripcion">Descripción:</label>
+         <input type="text" id="Descripcion" required>
+        <label for="Precio">Precio:</label>
+        <input type="number" id="Precio" required>
+        <label for="Cantidad">Cantidad:</label>
+        <input type="number" id="Cantidad" required>
+        <button type="button" onclick="crearProducto()">Crear Producto</button>
+        <button type="reset">Reset</button>
+    </form>
+
+    <script>
+        function crearProducto() {
+            const ID = document.getElementById('ID').value;
+            const Descripcion = document.getElementById('Descripcion').value;
+            const Precio = document.getElementById('Precio').value;
+            const Cantidad = document.getElementById('Cantidad').value;
+
+            const newProduct = {
+                ID: ID,
+                Descripcion: Descripcion,
+                Precio: parseFloat(Precio),
+                Cantidad: parseInt(Cantidad)
+            };
+
+            fetch('http://localhost:4500/productos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newProduct)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.mensaje) {
+                    alert(data.mensaje);
+                } else if (data.error) {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
